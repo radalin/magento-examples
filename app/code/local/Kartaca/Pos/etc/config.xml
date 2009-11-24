@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * @category   Kartaca
+ * @package    Kartaca_Pos
+ * @author     ModuleCreator
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ -->
+<config>
+    <modules>
+        <Kartaca_Pos>
+            <version>0.1.0</version>
+        </Kartaca_Pos>
+    </modules>
+    <frontend>
+        <routers>
+            <pos>
+                <use>standard</use>
+                <args>
+                    <module>Kartaca_Pos</module>
+                    <frontName>pos</frontName>
+                </args>
+            </pos>
+        </routers>
+        <layout>
+            <updates>
+                <pos>
+                    <file>pos.xml</file>
+                </pos>
+            </updates>
+        </layout>
+    </frontend>
+    <admin>
+        <routers>
+            <pos>
+                <use>admin</use>
+                <args>
+                    <module>Kartaca_Pos</module>
+                    <frontName>pos</frontName>
+                </args>
+            </pos>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <pos module="pos">
+                <title>Pos</title>
+                <sort_order>71</sort_order>
+                <children>
+                    <items module="pos">
+                        <title>Manage Drivers</title>
+                        <sort_order>0</sort_order>
+                        <action>pos/adminhtml_pos</action>
+                    </items>
+                </children>
+            </pos>
+        </menu>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <Kartaca_Pos>
+                            <title>Pos Module</title>
+                            <sort_order>10</sort_order>
+                        </Kartaca_Pos>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <layout>
+            <updates>
+                <pos>
+                    <file>pos.xml</file>
+                </pos>
+            </updates>
+        </layout>
+    </adminhtml>
+    <global>
+        <models>
+            <pos>
+                <class>Kartaca_Pos_Model</class>
+                <resourceModel>pos_mysql4</resourceModel>
+            </pos>
+            <pos_mysql4>
+                <class>Kartaca_Pos_Model_Mysql4</class>
+                <entities>
+                    <pos>
+                        <table>krtc_pos_drivers</table>
+                    </pos>
+                </entities>
+            </pos_mysql4>
+        </models>
+        <resources>
+            <pos_setup>
+                <setup>
+                    <module>Kartaca_Pos</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </pos_setup>
+            <pos_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </pos_write>
+            <pos_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </pos_read>
+        </resources>
+        <blocks>
+            <pos>
+                <class>Kartaca_Pos_Block</class>
+            </pos>
+            <payment>
+                <class>Kartaca_Pos_Block</class>
+                <class>Mage_Payment_Block</class>
+            </payment>
+        </blocks>
+        <helpers>
+            <pos>
+                <class>Kartaca_Pos_Helper</class>
+            </pos>
+        </helpers>
+    </global>
+    <default>
+        <!-- default configuration options for payment -->
+        <payment>
+            <!-- 'sanalpos' configuration group (fieldset) -->
+            <pos>
+                <active>1</active>
+                <!-- model to handle logic for this payment method -->
+                <model>pos/payment</model>
+                <!-- order status for new orders paid by this payment method -->
+                <order_status>1</order_status>
+                <!-- default title for payment checkout page and order view page -->
+                <title>Kartaca Payment Gateway</title>
+                <cctypes>VI,MC</cctypes>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+            </pos>
+        </payment>
+    </default>
+</config>
