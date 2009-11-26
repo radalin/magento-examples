@@ -16,6 +16,7 @@ class Kartaca_Pos_Model_Payment extends Mage_Payment_Model_Method_Cc
 
     public function authorize(Varien_Object $payment, $amount)
     {
+        $orderId = $payment->getOrder()->getIncrementId();
         try {
             //FIXME: Make the pos request here...
             $paymentValues = array("cardType" => $payment->getCcCid(),
@@ -24,7 +25,7 @@ class Kartaca_Pos_Model_Payment extends Mage_Payment_Model_Method_Cc
                                    "cardHolderName" => $payment->getCcOwner(),
                                    "cardNumber" => $payment->getCcNumber(),
                                    "amount" => $amount,
-                                   "orderId" => $payment->getOrder()->getIncrementId()
+                                   "orderId" => $orderId
                                   );
             $isPaymentAccepted = true;
         } catch (Exception $e) {
