@@ -96,9 +96,8 @@ class Kartaca_Pos_Model_Payment extends Mage_Payment_Model_Method_Cc
             $payment->setLastTransId($orderId);
         } else {
             $this->setStore($payment->getOrder()->getStoreId());
-            $payment->setStatus(self::STATUS_DECLINED);
-            $payment->setAmount($amount);
-            $payment->setLastTransId($orderId);
+            $payment->setStatus(self::STATUS_ERROR);
+            Mage::throwException("Payment is not approved");
         }
         return $this;
     }
