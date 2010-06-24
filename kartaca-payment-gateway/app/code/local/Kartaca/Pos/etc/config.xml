@@ -30,6 +30,17 @@
                 </pos>
             </updates>
         </layout>
+        <events>
+          <checkout_type_onepage_save_order>
+            <observers>
+              <kartacapos_set_informations>
+                <type>model</type>
+                <class>Kartaca_Pos_Helper_Data</class>
+                <method>setPosInformations</method>
+              </kartacapos_set_informations>
+            </observers>
+          </checkout_type_onepage_save_order>
+        </events>
     </frontend>
     <admin>
         <routers>

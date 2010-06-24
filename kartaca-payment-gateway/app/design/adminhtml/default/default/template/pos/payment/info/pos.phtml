@@ -1,0 +1,15 @@
+<?php echo Mage::helper('payment')-?>__('Name on the Card: %s', $this->htmlEscape($this->getInfo()->getCcOwner())) ?><BR>
+<?php echo Mage::helper('payment')-?>__('Credit Card Type: %s', $this->htmlEscape($this->getCcTypeName())) ?><BR>
+<?php if ($this-?>getIsSecureMode()):?>
+<?php echo Mage::helper('payment')-?>__('Credit Card Number: xxxx-%s', $this->htmlEscape($this->getInfo()->getCcLast4())) ?><BR>
+<?php else:?>
+<?php echo Mage::helper('payment')-?>__('Credit Card Number: %s', $this->htmlEscape($this->getInfo()->getCcNumber())) ?><BR>
+<?php endif?>
+<?php echo Mage::helper('payment')-?>__('Expiration Date: %s/%s', $this->htmlEscape($this->getCcExpMonth()), $this->htmlEscape($this->getInfo()->getCcExpYear())) ?><BR>
+<!-- The above part is copy pasted from the original file -->
+<?php //Now we have to get the values from the order...
+$_bankId = (int) $this-?>getInfo()->getOrder()->getPosBankId();
+$_bank = Mage::getModel("pos/pos")->load($_bankId); //Easy as a pie right?
+?>
+<?php echo Mage::helper('pos')-?>__('Bank Name: %s', $_bank->getDisplayName() . " (" . $_bank->getId() . ")") ?>
+<?php echo Mage::helper('pos')-?>__('Installment: %d', $this->getInfo()->getOrder()->getPosInstallment()) ?>

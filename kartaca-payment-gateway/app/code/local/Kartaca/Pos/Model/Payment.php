@@ -19,15 +19,16 @@ class Kartaca_Pos_Model_Payment extends Mage_Payment_Model_Method_Cc
         $orderId = $payment->getOrder()->getIncrementId();
         try {
             $paymentValues = array("cardType" => $payment->getCcCid(),
-                                   "expiresMonth" => $payment->getCcExpMonth(),
-                                   "expiresYear" => $payment->getCcExpYear(),
-                                   "cardHolderName" => $payment->getCcOwner(),
-                                   "cardNumber" => $payment->getCcNumber(),
-                                   "amount" => $amount,
-                                   "orderId" => $orderId,
-                                  );
+                                               "expiresMonth" => $payment->getCcExpMonth(),
+                                               "expiresYear" => $payment->getCcExpYear(),
+                                               "cardHolderName" => $payment->getCcOwner(),
+                                               "cardNumber" => $payment->getCcNumber(),
+                                               "amount" => $amount,
+                                               "orderId" => $orderId,
+                                               "bankId" => $payment->getOrder()->getPosBankId(), //Notice how I use the get methods?
+                                               "installment" => $payment->getOrder()->getPosInstallment(),
+                                              );
             //FIXME: Find a way to define this part in the $payment object which is Magento_Sales_Info or something like that.                      
-            $bankid = $_POST['bank_id']; //FIXME: Do not forget to sanitise this...
             if ($bankid == 12) { //Different banks...
                 $paymentValues['username'] = "my_bank_username";
                 $paymentValues['password'] = "my_secret_password_generally_not_that_secret";
@@ -38,7 +39,7 @@ class Kartaca_Pos_Model_Payment extends Mage_Payment_Model_Method_Cc
                 $paymentValues['clientid'] = "my_clientid_given_to_me_by_the_bank";
                 $paymentValues['additionalSecondBankField'] = "additional_info";
             } else {
-                throw new Exception("Invalid bankid: $bankid");
+                Mage::throwException("Invalid bankid: $bankid");
             }
             //Define the url where I'm making the request...                      
             $urlToPost = "https://my.bank.com/pos/service/address/";
@@ -64,7 +65,7 @@ class Kartaca_Pos_Model_Payment extends Mage_Payment_Model_Method_Cc
             }
             $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($httpcode && substr($httpcode, 0, 2) != "20") { //Unsuccessful post request...
-                throw new Exception("Returned HTTP CODE: " . $httpcode . " for this URL: " . $urlToPost);
+                Mage::throwException("Returned HTTP CODE: " . $httpcode . " for this URL: " . $urlToPost);
             }
             curl_close($ch);
         } catch (Exception $e) {
@@ -97,6 +98,7 @@ class Kartaca_Pos_Model_Payment extends Mage_Payment_Model_Method_Cc
         } else {
             $this->setStore($payment->getOrder()->getStoreId());
             $payment->setStatus(self::STATUS_ERROR);
+            //Throw an exception to fail the current transaction...
             Mage::throwException("Payment is not approved");
         }
         return $this;
