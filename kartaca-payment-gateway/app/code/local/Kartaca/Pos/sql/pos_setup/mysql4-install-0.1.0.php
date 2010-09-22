@@ -63,6 +63,21 @@ CREATE TABLE {$this->getTable('pos')} (
   PRIMARY KEY (`pos_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS {$this->getTable('krtc_pos_drivers')};
+CREATE TABLE {$this->getTable('krtc_pos_drivers')} (
+  `pos_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `bank_url` varchar(255) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `bank_id` int(11) NOT NULL,
+  `currency` varchar(5) NOT NULL,
+  `status` smallint(6) NOT NULL DEFAULT '0',
+  `created_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`pos_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 ");
 
 $installer->endSetup();
